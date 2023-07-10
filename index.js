@@ -9,8 +9,6 @@ const client = new Client({
   ],
 });
 
-const request = require("request");
-
 const token = require("./config.json").token;
 const wallhaven_key = require("./config.json").wallhaven_key;
 
