@@ -1,5 +1,12 @@
 import { Client, GatewayIntentBits } from "discord.js";
-import { get } from "request";
+import pkg from "request";
+import dotenv from "dotenv"
+
+const { get } = pkg;
+
+dotenv.config();
+
+const token = process.env.TOKEN;
 
 const client = new Client({
   intents: [
@@ -8,9 +15,6 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
   ],
 });
-
-const token = require("./config.json").token;
-const wallhaven_key = require("./config.json").wallhaven_key;
 
 client.on("ready", () => {
   console.log(`Logged in as ${client.user.tag}!`);
@@ -29,12 +33,14 @@ client.on("messageCreate", (message) => {
     const param = args.join(" ");
     const url =
       "https://wallhaven.cc/api/v1/search?apikey=" +
-      wallhaven_key +
+      process.env.WALLHAVEN_API_KEY+
       "&q=" +
       param +
       "&categories=111&purity=110&sorting=random&order=asc&ratios=16x9&page=1&atleast=1920x1080";
 
-    get(url, (error, response, body) => {
+    let img_url;
+    
+    get(url, (error, _, body) => {
       if (error) {
         console.error(error);
       } else {
